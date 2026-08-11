@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("caja-registradora")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4a157afde04e25af0904628e0626ea67916d9b28")]
 [assembly: System.Reflection.AssemblyProductAttribute("caja-registradora")]
 [assembly: System.Reflection.AssemblyTitleAttribute("caja-registradora")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

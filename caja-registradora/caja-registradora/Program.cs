@@ -42,6 +42,26 @@ class Kiosk
         return product;
     }
 
+    public decimal DiscountTotal(decimal total)
+    {
+        const decimal discount10Percent = 0.10m;
+        const decimal discount5Percent = 0.05m;
+
+        if (total >= 50000)
+        {
+            Console.WriteLine("Descuento aplicado del 10%.");
+            return total - (total * discount10Percent);
+        }
+        else if (total >= 20000)
+        {
+            Console.WriteLine("Descuento aplicado del 5%.");
+            return total - (total * discount5Percent);
+        }
+
+        Console.WriteLine("No se aplicó ningún descuento.");
+        return total;
+    }
+
     public void menu()
     {
         bool open = true;
@@ -69,7 +89,11 @@ class Kiosk
                         Console.WriteLine($"- {p.name}: ${p.price}");
                         total += p.price;
                     }
-                    Console.WriteLine($"Total a pagar: ${total}");
+
+                    decimal finalTotal = DiscountTotal(total);
+
+                    Console.WriteLine("Subtotal: $" + total);
+                    Console.WriteLine($"Total a pagar: ${finalTotal}");
 
                     open = false;
                     break;

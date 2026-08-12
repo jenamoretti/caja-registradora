@@ -14,16 +14,23 @@ class Product
         this.price = price;
     }
 }
+
 class Kiosk
 {
+    const string kioskName = "El Recreo";
+    public string cashierName = "";
+
+    const decimal discount10Percent = 0.10m;
+    const decimal discount5Percent = 0.05m;
+    const decimal recharge15Percent = 0.15m;
     public void OpenCashRegister()
     {
-        const string kioskName = "El Recreo";
 
         Console.WriteLine("Ingrese el nombre del cajero:");
-        string cashierName = Console.ReadLine();
+        cashierName = Console.ReadLine();
+        Console.WriteLine();
 
-        Console.WriteLine("===KIOSCO" + kioskName.ToUpper() + "===");
+        Console.WriteLine("===KIOSCO " + kioskName.ToUpper() + "===");
         Console.WriteLine("Nombre del cajero: " + cashierName);
         Console.WriteLine("Bienvenido al sistema, " + cashierName + ". Caja abierta.");
 
@@ -36,15 +43,13 @@ class Kiosk
         Console.WriteLine("Ingrese el precio del producto:");
         decimal productPrice = Convert.ToDecimal(Console.ReadLine());
         Console.WriteLine("Producto agregado: " + productName + " - Precio: $" + productPrice);
+        Console.WriteLine();
 
         Product product = new Product(productName, productPrice);
 
         return product;
     }
 
-    const decimal discount10Percent = 0.10m;
-    const decimal discount5Percent = 0.05m;
-    const decimal recharge15Percent = 0.15m;
     public decimal DiscountTotal(decimal total)
     {
 
@@ -73,10 +78,12 @@ class Kiosk
             total += p.price;
         }
 
-        decimal finalTotal = DiscountTotal(total);
+        decimal totalWithDiscount = DiscountTotal(total);
+        decimal discountAmount = total - totalWithDiscount;
+        decimal rechargeAmount = 0m;
 
         Console.WriteLine("Subtotal: $" + total);
-        Console.WriteLine($"Total a pagar: ${finalTotal}");
+        Console.WriteLine($"Total a pagar: ${totalWithDiscount}");
 
         Console.WriteLine();
         Console.WriteLine("=== MEDIOS DE PAGO ===");
@@ -85,11 +92,14 @@ class Kiosk
         Console.WriteLine("3 - Crédito (+15% recargo)");
 
         int paymentMethod = int.Parse(Console.ReadLine());
+        decimal finalTotal = totalWithDiscount;
 
         switch (paymentMethod)
         {
             case 1:
-                finalTotal += finalTotal * discount10Percent;
+                decimal extraDiscount = totalWithDiscount * discount10Percent;
+                discountAmount += extraDiscount;
+                finalTotal -= extraDiscount;
                 Console.WriteLine("Pago en efectivo. Se aplicó un descuento del 10%.");
                 Console.WriteLine("Total final a pagar: $" + finalTotal);
                 break;
@@ -100,7 +110,8 @@ class Kiosk
                 break;
 
             case 3:
-                finalTotal += finalTotal * recharge15Percent;
+                rechargeAmount = totalWithDiscount * recharge15Percent;
+                finalTotal += rechargeAmount;
                 Console.WriteLine("Pago con crédito. Se aplicó un recargo del 15%.");
                 Console.WriteLine("Total final a pagar: $" + finalTotal);
                 break;
@@ -109,6 +120,33 @@ class Kiosk
                 Console.WriteLine("Opción de pago no válida.");
                 break;
         }
+
+        PrintTicket(cashierName, cart.Count, total, discountAmount, rechargeAmount, finalTotal);
+    }
+
+    public void PrintDivider(int length = 30)
+    {
+        for (int i = 0; i < length; i++)
+        {
+            Console.Write("-");
+        }
+        Console.WriteLine();
+    }
+
+    public void PrintTicket(string cashierName, int totalProducts, decimal subtotal, decimal discountAmount, decimal rechargeAmount, decimal finalTotal)
+    {
+        Console.WriteLine();
+        PrintDivider();
+        Console.WriteLine($"       KIOSCO {kioskName}");
+        PrintDivider();
+        Console.WriteLine($"Cajero: {cashierName}");
+        Console.WriteLine($"Productos: {totalProducts}");
+        Console.WriteLine($"Subtotal: {subtotal}");
+        Console.WriteLine($"Descuento: {discountAmount}");
+        Console.WriteLine($"Recargo: {rechargeAmount}");
+        PrintDivider();
+        Console.WriteLine($"TOTAL: {finalTotal}");
+        PrintDivider();
     }
 
     public void menu()

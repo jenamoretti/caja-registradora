@@ -42,10 +42,11 @@ class Kiosk
         return product;
     }
 
+    const decimal discount10Percent = 0.10m;
+    const decimal discount5Percent = 0.05m;
+    const decimal recharge15Percent = 0.15m;
     public decimal DiscountTotal(decimal total)
     {
-        const decimal discount10Percent = 0.10m;
-        const decimal discount5Percent = 0.05m;
 
         if (total >= 50000)
         {
@@ -60,6 +61,54 @@ class Kiosk
 
         Console.WriteLine("No se aplicó ningún descuento.");
         return total;
+    }
+
+    public void PaymentMenu(List<Product> cart)
+    {
+        decimal total = 0;
+        Console.WriteLine("\n=== RESUMEN DE VENTA ===");
+        foreach (Product p in cart)
+        {
+            Console.WriteLine($"- {p.name}: ${p.price}");
+            total += p.price;
+        }
+
+        decimal finalTotal = DiscountTotal(total);
+
+        Console.WriteLine("Subtotal: $" + total);
+        Console.WriteLine($"Total a pagar: ${finalTotal}");
+
+        Console.WriteLine();
+        Console.WriteLine("=== MEDIOS DE PAGO ===");
+        Console.WriteLine("1 - Efectivo (+10% descuento)");
+        Console.WriteLine("2 - Débito");
+        Console.WriteLine("3 - Crédito (+15% recargo)");
+
+        int paymentMethod = int.Parse(Console.ReadLine());
+
+        switch (paymentMethod)
+        {
+            case 1:
+                finalTotal += finalTotal * discount10Percent;
+                Console.WriteLine("Pago en efectivo. Se aplicó un descuento del 10%.");
+                Console.WriteLine("Total final a pagar: $" + finalTotal);
+                break;
+
+            case 2:
+                Console.WriteLine("Pago con débito. No se aplican descuentos ni recargos.");
+                Console.WriteLine("Total final a pagar: $" + finalTotal);
+                break;
+
+            case 3:
+                finalTotal += finalTotal * recharge15Percent;
+                Console.WriteLine("Pago con crédito. Se aplicó un recargo del 15%.");
+                Console.WriteLine("Total final a pagar: $" + finalTotal);
+                break;
+
+            default:
+                Console.WriteLine("Opción de pago no válida.");
+                break;
+        }
     }
 
     public void menu()
@@ -82,19 +131,7 @@ class Kiosk
                     break;
 
                 case 2:
-                    decimal total = 0;
-                    Console.WriteLine("\n=== RESUMEN DE VENTA ===");
-                    foreach (Product p in cart)
-                    {
-                        Console.WriteLine($"- {p.name}: ${p.price}");
-                        total += p.price;
-                    }
-
-                    decimal finalTotal = DiscountTotal(total);
-
-                    Console.WriteLine("Subtotal: $" + total);
-                    Console.WriteLine($"Total a pagar: ${finalTotal}");
-
+                    PaymentMenu(cart);
                     open = false;
                     break;
 
